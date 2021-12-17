@@ -14,10 +14,12 @@
 {%- set test_columns_to_select = [] -%}
 
 {% for column in columns %}
-    {% if column.dtype != 'BINARY' %}  
+    {% if column.dtype == 'BINARY' %}  
+        {% do test_columns_to_select.append("to_binary("~column.name~")") %}
+    {% else %}  
         {% do test_columns_to_select.append(column.name) %}
-        {% do model_columns_to_select.append(column.name) %}
     {% endif %}  
+    {% do model_columns_to_select.append(column.name) %}
 {% endfor %}
 
 with extra_rows as (
