@@ -29,8 +29,9 @@ def init():
 @click.command()
 @click.option('--tests', help='tests to run.')
 @click.option('--batches', default=2, help='batches to run.')
+@click.option('--load_dates', multiple=True help='load dates to run.')
 @click.option('--log-level', default='info', help='Set log level.')
-def run(tests, batches, log_level):
+def run(tests, batches, load_dates, log_level):
     """Run unit tests on a dbt models."""
     # use defaults if there is no config file.
 
@@ -53,11 +54,14 @@ def run(tests, batches, log_level):
     errors = 0
 
     errors += ops.dbt_sp(['dbt', 'seed', '--full-refresh'] + select + profile)
-
+    
     for batch in range(1, batches+1):
         vars_ = []
         if batch < batches:
-            vars_ += ['--vars', f"batch: {batch}"]
+            if(load_dates):
+                vars_ += ['--vars', f"load_date: {load_dates[batch-1]}"]
+            else: 
+                vars_ += ['--vars', f"batch: {batch}"]
 
         if batch == 1:
             vars_ += ['--full-refresh']
