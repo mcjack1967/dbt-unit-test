@@ -30,7 +30,7 @@ def init():
 @click.option('--tests', help='tests to run.')
 @click.option('--batches', default=2, help='batches to run.')
 @click.option('--log-level', default='info', help='Set log level.')
-def run(tests, batches, load_dates, log_level):
+def run(tests, batches, log_level):
     """Run unit tests on a dbt models."""
     # use defaults if there is no config file.
 
