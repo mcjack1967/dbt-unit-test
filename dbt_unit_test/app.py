@@ -29,7 +29,6 @@ def init():
 @click.command()
 @click.option('--tests', help='tests to run.')
 @click.option('--batches', default=2, help='batches to run.')
-@click.option('--load_dates', nargs=2, help='load dates to run.')
 @click.option('--log-level', default='info', help='Set log level.')
 def run(tests, batches, load_dates, log_level):
     """Run unit tests on a dbt models."""
@@ -58,10 +57,7 @@ def run(tests, batches, load_dates, log_level):
     for batch in range(1, batches+1):
         vars_ = []
 
-        if(load_dates):
-            vars_ += ['--vars', f"load_date: {load_dates[batch-1]}"]
-        else: 
-            vars_ += ['--vars', f"batch: {batch}"]
+        vars_ += ['--vars', f"batch: {batch}"]
 
         if batch == 1:
             vars_ += ['--full-refresh']
